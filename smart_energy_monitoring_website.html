@@ -1,0 +1,277 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+.hero { background: linear-gradient(135deg, #1a3a5c 0%, #0f6e56 100%); color: white; padding: 3rem 2rem; text-align: center; border-radius: var(--border-radius-lg); margin-bottom: 2rem; }
+.hero h1 { font-size: 2rem; font-weight: 500; margin-bottom: 0.5rem; }
+.hero p { font-size: 1rem; opacity: 0.85; max-width: 600px; margin: 0 auto 1.5rem; }
+.badge-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.badge { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; padding: 5px 14px; font-size: 12px; font-weight: 500; }
+.section { margin-bottom: 2rem; }
+.section-title { font-size: 1.1rem; font-weight: 500; color: var(--color-text-primary); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 2rem; }
+.metric-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem; text-align: center; }
+.metric-label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 6px; }
+.metric-value { font-size: 1.6rem; font-weight: 500; }
+.metric-unit { font-size: 13px; color: var(--color-text-secondary); margin-top: 2px; }
+.v-color { color: #185FA5; }
+.c-color { color: #0F6E56; }
+.p-color { color: #BA7517; }
+.e-color { color: #993556; }
+.live-dot { display: inline-block; width: 8px; height: 8px; background: #1D9E75; border-radius: 50%; margin-right: 6px; animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.chart-area { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-bottom: 2rem; }
+.chart-title { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 1rem; }
+.bars { display: flex; align-items: flex-end; gap: 6px; height: 120px; }
+.bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.bar { width: 100%; border-radius: 4px 4px 0 0; transition: height 0.3s; min-width: 20px; }
+.bar-label { font-size: 10px; color: var(--color-text-secondary); }
+.devices-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 2rem; }
+.device-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem; }
+.device-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.device-name { font-size: 14px; font-weight: 500; }
+.toggle { width: 36px; height: 20px; border-radius: 10px; border: none; cursor: pointer; position: relative; transition: background 0.2s; }
+.toggle.on { background: #1D9E75; }
+.toggle.off { background: var(--color-border-tertiary); }
+.toggle::after { content:''; position:absolute; width:14px; height:14px; border-radius:50%; background:white; top:3px; transition: left 0.2s; }
+.toggle.on::after { left: 19px; }
+.toggle.off::after { left: 3px; }
+.device-stat { font-size: 12px; color: var(--color-text-secondary); margin-top: 4px; }
+.device-power { font-size: 1.1rem; font-weight: 500; color: #BA7517; }
+.alert-box { background: #FAEEDA; border: 0.5px solid #EF9F27; border-radius: var(--border-radius-md); padding: 0.75rem 1rem; margin-bottom: 2rem; font-size: 13px; color: #633806; display: flex; align-items: center; gap: 8px; }
+.arch-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0; margin-bottom: 2rem; align-items: center; }
+.arch-node { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 0.75rem; text-align: center; }
+.arch-arrow { text-align: center; font-size: 18px; color: var(--color-text-secondary); }
+.arch-icon { font-size: 24px; margin-bottom: 6px; }
+.arch-node-name { font-size: 12px; font-weight: 500; }
+.arch-node-sub { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+.team-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 2rem; }
+.team-pill { background: var(--color-background-secondary); border-radius: 20px; padding: 6px 14px; font-size: 13px; display: flex; align-items: center; gap: 6px; }
+.avatar { width: 24px; height: 24px; border-radius: 50%; background: #185FA5; display: flex; align-items: center; justify-content: center; font-size: 10px; color: white; font-weight: 500; }
+.av2 { background: #0F6E56; }
+.av3 { background: #993556; }
+.av4 { background: #BA7517; }
+.av5 { background: #533AB7; }
+.footer { text-align: center; font-size: 12px; color: var(--color-text-secondary); padding: 1.5rem 0 0.5rem; border-top: 0.5px solid var(--color-border-tertiary); }
+.tab-row { display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap; }
+.tab { padding: 6px 14px; border-radius: 20px; border: 0.5px solid var(--color-border-tertiary); font-size: 13px; cursor: pointer; background: var(--color-background-primary); color: var(--color-text-secondary); }
+.tab.active { background: #185FA5; color: white; border-color: #185FA5; }
+</style>
+
+<h2 class="sr-only">Smart Energy Monitoring and Management System — project website for K.R. Mangalam University pre-final year project</h2>
+
+<div class="hero">
+  <div style="font-size:11px;letter-spacing:2px;opacity:0.7;margin-bottom:8px;text-transform:uppercase;">K.R. Mangalam University · Pre-Final Year Project</div>
+  <h1>⚡ Smart Energy Monitoring System</h1>
+  <p>IoT-based real-time energy monitoring for home appliances using NodeMCU ESP8266, PZEM-004T sensor, and Blynk IoT dashboard</p>
+  <div class="badge-row">
+    <span class="badge">NodeMCU ESP8266</span>
+    <span class="badge">PZEM-004T</span>
+    <span class="badge">Blynk IoT</span>
+    <span class="badge">Relay Module</span>
+    <span class="badge">Arduino IDE</span>
+  </div>
+</div>
+
+<div class="alert-box">
+  <span class="live-dot"></span>
+  <span><strong>Live Demo</strong> — Simulated sensor data. Real system streams via Wi-Fi to Blynk IoT cloud.</span>
+</div>
+
+<div class="section">
+  <div class="section-title">Real-time readings</div>
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="metric-label">Voltage</div>
+      <div class="metric-value v-color" id="volt">232.5</div>
+      <div class="metric-unit">Volts (V)</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Current</div>
+      <div class="metric-value c-color" id="curr">0.22</div>
+      <div class="metric-unit">Ampere (A)</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Power</div>
+      <div class="metric-value p-color" id="pwr">45.8</div>
+      <div class="metric-unit">Watts (W)</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Energy</div>
+      <div class="metric-value e-color" id="enrg">0.13</div>
+      <div class="metric-unit">kWh</div>
+    </div>
+  </div>
+</div>
+
+<div class="chart-area">
+  <div class="chart-title"><span class="live-dot"></span>Power consumption — last 8 readings (W)</div>
+  <div class="bars" id="bars"></div>
+</div>
+
+<div class="section">
+  <div class="section-title">Appliance control</div>
+  <div class="devices-grid">
+    <div class="device-card">
+      <div class="device-header">
+        <div>
+          <div style="font-size:18px;margin-bottom:2px;">💡</div>
+          <div class="device-name">Bulb</div>
+        </div>
+        <button class="toggle on" id="t1" onclick="toggleDevice('t1','pw1')"></button>
+      </div>
+      <div class="device-power" id="pw1">45.8 W</div>
+      <div class="device-stat">AC Supply · 220V</div>
+    </div>
+    <div class="device-card">
+      <div class="device-header">
+        <div>
+          <div style="font-size:18px;margin-bottom:2px;">🌀</div>
+          <div class="device-name">Fan</div>
+        </div>
+        <button class="toggle off" id="t2" onclick="toggleDevice('t2','pw2')"></button>
+      </div>
+      <div class="device-power" id="pw2">0 W</div>
+      <div class="device-stat">AC Supply · 220V</div>
+    </div>
+    <div class="device-card">
+      <div class="device-header">
+        <div>
+          <div style="font-size:18px;margin-bottom:2px;">🔌</div>
+          <div class="device-name">Socket 3</div>
+        </div>
+        <button class="toggle off" id="t3" onclick="toggleDevice('t3','pw3')"></button>
+      </div>
+      <div class="device-power" id="pw3">0 W</div>
+      <div class="device-stat">AC Supply · 220V</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">System architecture</div>
+  <div class="arch-row">
+    <div class="arch-node">
+      <div class="arch-icon">⚡</div>
+      <div class="arch-node-name">AC Load</div>
+      <div class="arch-node-sub">Bulb / Fan</div>
+    </div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-node">
+      <div class="arch-icon">🔍</div>
+      <div class="arch-node-name">PZEM-004T</div>
+      <div class="arch-node-sub">V, I, P sensor</div>
+    </div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-node">
+      <div class="arch-icon">🔧</div>
+      <div class="arch-node-name">NodeMCU</div>
+      <div class="arch-node-sub">ESP8266</div>
+    </div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-node">
+      <div class="arch-icon">☁️</div>
+      <div class="arch-node-name">Blynk Cloud</div>
+      <div class="arch-node-sub">Wi-Fi / IoT</div>
+    </div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-node">
+      <div class="arch-icon">📱</div>
+      <div class="arch-node-name">Dashboard</div>
+      <div class="arch-node-sub">Mobile / Web</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Project overview</div>
+  <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;font-size:14px;line-height:1.7;color:var(--color-text-secondary);">
+    Most households lack real-time visibility of energy consumption at the appliance level. This project builds an IoT-based solution using the NodeMCU ESP8266 microcontroller and PZEM-004T energy sensor to track voltage, current, power, and energy consumption in real time. Data is transmitted over Wi-Fi to the Blynk IoT cloud and displayed on a user-friendly mobile dashboard. A relay module enables basic automation — triggering alerts or switching appliances when power exceeds a threshold.
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Components used</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;">
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:0.75rem;font-size:13px;">
+      <div style="font-weight:500;margin-bottom:3px;">NodeMCU ESP8266</div>
+      <div style="color:var(--color-text-secondary);font-size:12px;">Wi-Fi microcontroller — runs C++ code via Arduino IDE</div>
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:0.75rem;font-size:13px;">
+      <div style="font-weight:500;margin-bottom:3px;">PZEM-004T</div>
+      <div style="color:var(--color-text-secondary);font-size:12px;">Measures AC voltage, current, power & energy</div>
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:0.75rem;font-size:13px;">
+      <div style="font-weight:500;margin-bottom:3px;">CT Clamp</div>
+      <div style="color:var(--color-text-secondary);font-size:12px;">Non-invasive current measurement around live wire</div>
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:0.75rem;font-size:13px;">
+      <div style="font-weight:500;margin-bottom:3px;">Relay Module</div>
+      <div style="color:var(--color-text-secondary);font-size:12px;">Switches appliances on/off via automation logic</div>
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:0.75rem;font-size:13px;">
+      <div style="font-weight:500;margin-bottom:3px;">Transformer / PSU</div>
+      <div style="color:var(--color-text-secondary);font-size:12px;">Powers the NodeMCU from 220V AC supply</div>
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:0.75rem;font-size:13px;">
+      <div style="font-weight:500;margin-bottom:3px;">Blynk IoT</div>
+      <div style="color:var(--color-text-secondary);font-size:12px;">Cloud platform + mobile dashboard for monitoring</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Project team</div>
+  <div class="team-row">
+    <div class="team-pill"><div class="avatar">AG</div> Arshia Goswami <span style="font-size:11px;color:var(--color-text-secondary);">2301730051</span></div>
+    <div class="team-pill"><div class="avatar av2">VY</div> Vineet Yadav <span style="font-size:11px;color:var(--color-text-secondary);">2301730053</span></div>
+    <div class="team-pill"><div class="avatar av3">AS</div> Aadya Saxena <span style="font-size:11px;color:var(--color-text-secondary);">2301730037</span></div>
+    <div class="team-pill"><div class="avatar av4">HM</div> Harsh Mehto <span style="font-size:11px;color:var(--color-text-secondary);">2301730054</span></div>
+    <div class="team-pill"><div class="avatar av5">HC</div> Harsh Chaudhary <span style="font-size:11px;color:var(--color-text-secondary);">2301730034</span></div>
+  </div>
+  <div style="font-size:13px;color:var(--color-text-secondary);">Faculty Mentor: <strong>Dr. Swati</strong> · K.R. Mangalam University</div>
+</div>
+
+<div class="footer">Smart Energy Monitoring &amp; Management System · K.R. Mangalam University · Pre-Final Year Project 2024–25</div>
+
+<script>
+const readings = [42, 46, 44, 48, 45, 47, 43, 45.8];
+const barsEl = document.getElementById('bars');
+const max = Math.max(...readings);
+readings.forEach((v, i) => {
+  const w = document.createElement('div');
+  w.className = 'bar-wrap';
+  const b = document.createElement('div');
+  b.className = 'bar';
+  b.style.height = Math.round((v / max) * 100) + 'px';
+  b.style.background = i === readings.length - 1 ? '#185FA5' : '#B5D4F4';
+  const l = document.createElement('div');
+  l.className = 'bar-label';
+  l.textContent = v.toFixed(1);
+  w.appendChild(b);
+  w.appendChild(l);
+  barsEl.appendChild(w);
+});
+
+function toggleDevice(tid, pid) {
+  const t = document.getElementById(tid);
+  const p = document.getElementById(pid);
+  const isOn = t.classList.contains('on');
+  t.classList.toggle('on', !isOn);
+  t.classList.toggle('off', isOn);
+  p.textContent = isOn ? '0 W' : (tid === 't1' ? '45.8 W' : tid === 't2' ? '58.0 W' : '30.0 W');
+}
+
+let tick = 0;
+setInterval(() => {
+  tick++;
+  const v = (231 + Math.sin(tick * 0.3) * 2).toFixed(1);
+  const c = (0.20 + Math.sin(tick * 0.5) * 0.03).toFixed(2);
+  const p = (parseFloat(v) * parseFloat(c)).toFixed(1);
+  const e = (0.13 + tick * 0.0001).toFixed(3);
+  document.getElementById('volt').textContent = v;
+  document.getElementById('curr').textContent = c;
+  document.getElementById('pwr').textContent = p;
+  document.getElementById('enrg').textContent = e;
+}, 1500);
+</script>
