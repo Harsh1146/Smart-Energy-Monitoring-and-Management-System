@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Energy Monitor — KR Mangalam University</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080c10;
+  --bg2: #0d1117;
+  --bg3: #111820;
+  --card: #0f1923;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --accent: #00e5a0;
+  --accent2: #0070f3;
+  --accent3: #f59e0b;
+  --accent4: #ef4444;
+  --accent5: #8b5cf6;
+  --text: #f0f4f8;
+  --text2: #8899aa;
+  --text3: #4a5568;
+  --mono: 'DM Mono', monospace;
+  --display: 'Syne', sans-serif;
+  --body: 'Inter', sans-serif;
+  --glow: 0 0 40px rgba(0,229,160,0.15);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body);
+  font-size: 15px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2rem;
+  height: 60px;
+  background: rgba(8,12,16,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--accent);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  display: flex; align-items: center; gap: 8px;
+}
+.nav-logo-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent);
+  animation: blink 1.5s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.2;} }
+.nav-links { display: flex; gap: 2rem; }
+.nav-links a {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--text2);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--accent); }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: flex-start;
+  padding: 80px 4rem 4rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero-grid-bg {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,229,160,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,160,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+.hero-glow {
+  position: absolute;
+  top: -200px; right: -200px;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(0,229,160,0.08) 0%, transparent 65%);
+  pointer-events: none;
+}
+.hero-glow2 {
+  position: absolute;
+  bottom: -200px; left: -200px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(0,112,243,0.06) 0%, transparent 65%);
+  pointer-events: none;
+}
+.hero-tag {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--accent);
+  text-transform: uppercase;
+  border: 1px solid rgba(0,229,160,0.25);
+  padding: 5px 12px;
+  border-radius: 2px;
+  margin-bottom: 1.5rem;
+  display: inline-block;
+  animation: fadeUp 0.6s ease both;
+}
+.hero h1 {
+  font-family: var(--display);
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 800;
+  line-height: 1.0;
+  margin-bottom: 1.5rem;
+  animation: fadeUp 0.6s 0.1s ease both;
+}
+.hero h1 span { color: var(--accent); }
+.hero-sub {
+  font-size: 1.1rem;
+  color: var(--text2);
+  max-width: 540px;
+  line-height: 1.7;
+  margin-bottom: 2.5rem;
+  font-weight: 300;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+.hero-badges {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 3rem;
+  animation: fadeUp 0.6s 0.3s ease both;
+}
+.chip {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 1px;
+  padding: 5px 12px;
+  border: 1px solid var(--border2);
+  border-radius: 2px;
+  color: var(--text2);
+  background: rgba(255,255,255,0.03);
+}
+.hero-metrics {
+  display: flex; gap: 2rem; flex-wrap: wrap;
+  animation: fadeUp 0.6s 0.4s ease both;
+}
+.hero-metric { text-align: left; }
+.hero-metric-val {
+  font-family: var(--mono);
+  font-size: 2rem;
+  color: var(--accent);
+  display: block;
+  line-height: 1;
+}
+.hero-metric-label {
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--text3);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+.hero-scroll {
+  position: absolute;
+  bottom: 2rem; left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: 2px;
+  animation: bounce 2s infinite;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.hero-scroll::after {
+  content: '';
+  display: block;
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--text3), transparent);
+}
+@keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0);} 50%{transform:translateX(-50%) translateY(6px);} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(24px);} to{opacity:1;transform:translateY(0);} }
+
+/* SECTIONS */
+section {
+  padding: 6rem 4rem;
+  position: relative;
+}
+.section-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+.section-title {
+  font-family: var(--display);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 700;
+  margin-bottom: 3rem;
+  line-height: 1.15;
+}
+.section-divider {
+  width: 40px; height: 2px;
+  background: var(--accent);
+  margin-bottom: 3rem;
+}
+
+/* DASHBOARD SECTION */
+#dashboard { background: var(--bg2); }
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+.metric-box {
+  background: var(--card);
+  padding: 2rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.metric-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+}
+.metric-box.volt::before { background: var(--accent2); }
+.metric-box.curr::before { background: var(--accent); }
+.metric-box.pwr::before { background: var(--accent3); }
+.metric-box.enrg::before { background: var(--accent5); }
+
+.metric-icon {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--text3);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+.metric-big {
+  font-family: var(--mono);
+  font-size: 2.5rem;
+  font-weight: 500;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.metric-box.volt .metric-big { color: var(--accent2); }
+.metric-box.curr .metric-big { color: var(--accent); }
+.metric-box.pwr .metric-big { color: var(--accent3); }
+.metric-box.enrg .metric-big { color: var(--accent5); }
+.metric-unit {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text3);
+}
+.metric-status {
+  position: absolute;
+  top: 1rem; right: 1rem;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: blink 1.5s infinite;
+}
+
+/* CHART */
+.chart-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.chart-title {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text2);
+}
+.chart-live {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent);
+  display: flex; align-items: center; gap: 5px;
+}
+.chart-live::before {
+  content: '';
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: blink 1.5s infinite;
+}
+.chart-body {
+  height: 160px;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+}
+.chart-bar-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+  gap: 4px;
+}
+.chart-bar {
+  width: 100%;
+  min-height: 4px;
+  border-radius: 2px 2px 0 0;
+  transition: height 0.5s cubic-bezier(0.4,0,0.2,1);
+  position: relative;
+  cursor: pointer;
+}
+.chart-bar:hover { filter: brightness(1.3); }
+.chart-bar-val {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text3);
+  text-align: center;
+}
+.chart-bar-time {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text3);
+  text-align: center;
+}
+.chart-y-labels {
+  position: absolute;
+  left: -32px; top: 0; bottom: 0;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.chart-y-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text3);
+}
+.chart-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.chart-grid-line {
+  position: absolute;
+  left: 0; right: 0;
+  height: 1px;
+  background: var(--border);
+}
+
+/* APPLIANCES */
+#appliances { background: var(--bg); }
+.appliances-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.appliance-card {
+  background: var(--card);
+  padding: 1.5rem;
+  transition: background 0.2s;
+}
+.appliance-card:hover { background: #141e2a; }
+.appliance-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+.appliance-icon {
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+.appliance-name {
+  font-family: var(--display);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.appliance-sub {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+  letter-spacing: 1px;
+}
+
+/* TOGGLE SWITCH */
+.toggle-wrap { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.toggle-switch {
+  width: 44px; height: 24px;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.25s, border-color 0.25s;
+}
+.toggle-switch.on {
+  background: rgba(0,229,160,0.15);
+  border-color: var(--accent);
+}
+.toggle-knob {
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--text3);
+  transition: left 0.25s, background 0.25s;
+}
+.toggle-switch.on .toggle-knob {
+  left: 23px;
+  background: var(--accent);
+}
+.toggle-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+  letter-spacing: 1px;
+}
+.toggle-switch.on + .toggle-label { color: var(--accent); }
+
+.appliance-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+.app-stat {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 0.6rem;
+}
+.app-stat-val {
+  font-family: var(--mono);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text);
+  display: block;
+}
+.app-stat-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+  display: block;
+  margin-top: 2px;
+}
+.app-progress {
+  margin-top: 1rem;
+  height: 3px;
+  background: var(--bg3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.app-progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: var(--accent);
+  transition: width 0.5s ease;
+}
+
+/* ALERTS */
+.alert-panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 2rem;
+}
+.alert-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.alert-header-title {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text2);
+}
+.alert-count {
+  font-family: var(--mono);
+  font-size: 10px;
+  background: rgba(239,68,68,0.15);
+  color: var(--accent4);
+  border: 1px solid rgba(239,68,68,0.25);
+  padding: 2px 8px;
+  border-radius: 2px;
+}
+.alert-item {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 13px;
+}
+.alert-item:last-child { border-bottom: none; }
+.alert-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.alert-dot.warn { background: var(--accent3); }
+.alert-dot.ok { background: var(--accent); }
+.alert-dot.err { background: var(--accent4); animation: blink 1s infinite; }
+.alert-msg { color: var(--text2); flex: 1; }
+.alert-time {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+}
+
+/* ARCHITECTURE */
+#architecture { background: var(--bg2); }
+.arch-flow {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+}
+.arch-node {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1.5rem 1.25rem;
+  text-align: center;
+  min-width: 130px;
+  flex-shrink: 0;
+  position: relative;
+}
+.arch-node-icon { font-size: 1.6rem; margin-bottom: 0.5rem; display: block; }
+.arch-node-name {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+.arch-node-sub {
+  font-size: 10px;
+  color: var(--text3);
+}
+.arch-arrow {
+  flex: 1;
+  min-width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text3);
+  font-size: 18px;
+  position: relative;
+}
+.arch-arrow::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 1px;
+  background: var(--border2);
+}
+.arch-arrow-icon {
+  background: var(--bg2);
+  padding: 2px 4px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent);
+  position: relative;
+  z-index: 1;
+}
+
+/* DATA DETAIL TABLE */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: 12px;
+}
+.data-table th {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text3);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: 10px;
+  font-weight: 400;
+}
+.data-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text2);
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: rgba(255,255,255,0.02); }
+.status-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 2px;
+}
+.status-badge.done {
+  background: rgba(0,229,160,0.1);
+  color: var(--accent);
+  border: 1px solid rgba(0,229,160,0.2);
+}
+.status-badge.pending {
+  background: rgba(245,158,11,0.1);
+  color: var(--accent3);
+  border: 1px solid rgba(245,158,11,0.2);
+}
+
+/* TEAM */
+#team { background: var(--bg); }
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+.team-card {
+  background: var(--card);
+  padding: 1.5rem;
+  text-align: center;
+  transition: background 0.2s;
+}
+.team-card:hover { background: #141e2a; }
+.team-avatar {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  margin: 0 auto 0.75rem;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid var(--border2);
+}
+.team-name {
+  font-family: var(--display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.team-roll {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+  letter-spacing: 1px;
+}
+.mentor-box {
+  background: var(--card);
+  border: 1px solid rgba(0,229,160,0.15);
+  border-radius: 4px;
+  padding: 1.5rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.mentor-avatar {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: rgba(0,229,160,0.1);
+  border: 1px solid rgba(0,229,160,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--accent);
+  font-weight: 500;
+  flex-shrink: 0;
+}
+.mentor-info label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--accent);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 4px;
+}
+.mentor-info h3 {
+  font-family: var(--display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.mentor-info p { font-size: 13px; color: var(--text2); }
+
+/* HARDWARE SPECS */
+#hardware { background: var(--bg2); }
+.specs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.spec-card {
+  background: var(--card);
+  padding: 1.5rem;
+}
+.spec-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+  letter-spacing: 2px;
+  margin-bottom: 0.75rem;
+}
+.spec-name {
+  font-family: var(--display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+.spec-role {
+  font-size: 12px;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+.spec-params { list-style: none; }
+.spec-params li {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--text2);
+}
+.spec-params li:last-child { border-bottom: none; }
+.spec-params li span { color: var(--text3); }
+
+/* FOOTER */
+footer {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  padding: 3rem 4rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+.footer-brand {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--accent);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.footer-uni {
+  font-size: 13px;
+  color: var(--text3);
+  max-width: 300px;
+}
+.footer-right {
+  text-align: right;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+  line-height: 1.8;
+}
+
+/* ABOUT */
+#about { background: var(--bg); }
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+.about-text { font-size: 0.95rem; color: var(--text2); line-height: 1.8; }
+.about-text p { margin-bottom: 1rem; }
+.about-features { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+.feature-row {
+  background: var(--card);
+  padding: 1rem 1.25rem;
+  display: flex; align-items: center; gap: 1rem;
+  transition: background 0.2s;
+}
+.feature-row:hover { background: #141e2a; }
+.feature-icon {
+  width: 32px; height: 32px;
+  background: rgba(0,229,160,0.08);
+  border: 1px solid rgba(0,229,160,0.15);
+  border-radius: 3px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.feature-label { font-size: 13px; font-weight: 500; }
+.feature-sub { font-size: 11px; color: var(--text3); font-family: var(--mono); margin-top: 2px; }
+
+/* Threshold slider */
+.threshold-panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+.threshold-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+.threshold-title {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text2);
+}
+.threshold-val {
+  font-family: var(--mono);
+  font-size: 1.2rem;
+  color: var(--accent3);
+}
+input[type=range] {
+  width: 100%;
+  -webkit-appearance: none;
+  background: var(--bg3);
+  height: 4px;
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--accent3);
+  border: 2px solid var(--bg);
+  cursor: pointer;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  nav { padding: 0 1rem; }
+  .nav-links { display: none; }
+  .hero, section { padding: 80px 1.5rem 3rem; }
+  section { padding: 4rem 1.5rem; }
+  .about-grid { grid-template-columns: 1fr; }
+  .arch-flow { flex-direction: column; }
+  .arch-arrow { transform: rotate(90deg); }
+  footer { padding: 2rem 1.5rem; }
+  .footer-right { text-align: left; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-dot"></div>
+    SEMS
+  </div>
+  <div class="nav-links">
+    <a href="#dashboard">Dashboard</a>
+    <a href="#appliances">Appliances</a>
+    <a href="#architecture">Architecture</a>
+    <a href="#hardware">Hardware</a>
+    <a href="#team">Team</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-tag">Pre-Final Year Project · KR Mangalam University</div>
+  <h1>Smart <span>Energy</span><br>Monitor</h1>
+  <p class="hero-sub">Real-time IoT-based energy monitoring for home appliances using NodeMCU ESP8266, PZEM-004T sensor, and Blynk IoT cloud dashboard.</p>
+  <div class="hero-badges">
+    <span class="chip">NodeMCU ESP8266</span>
+    <span class="chip">PZEM-004T</span>
+    <span class="chip">Relay Module</span>
+    <span class="chip">CT Clamp</span>
+    <span class="chip">Blynk IoT</span>
+    <span class="chip">Arduino IDE</span>
+    <span class="chip">C++</span>
+  </div>
+  <div class="hero-metrics">
+    <div class="hero-metric">
+      <span class="hero-metric-val" id="h-volt">232.5</span>
+      <span class="hero-metric-label">Volts</span>
+    </div>
+    <div class="hero-metric">
+      <span class="hero-metric-val" id="h-curr">0.22</span>
+      <span class="hero-metric-label">Amps</span>
+    </div>
+    <div class="hero-metric">
+      <span class="hero-metric-val" id="h-pwr">45.8</span>
+      <span class="hero-metric-label">Watts</span>
+    </div>
+    <div class="hero-metric">
+      <span class="hero-metric-val" id="h-enrg">0.13</span>
+      <span class="hero-metric-label">kWh today</span>
+    </div>
+  </div>
+  <div class="hero-scroll">scroll</div>
+</section>
+
+<!-- DASHBOARD -->
+<section id="dashboard">
+  <div class="section-label">// Live Data</div>
+  <h2 class="section-title">Real-time Dashboard</h2>
+
+  <div class="metrics-row">
+    <div class="metric-box volt">
+      <div class="metric-status"></div>
+      <div class="metric-icon">VOLTAGE</div>
+      <div class="metric-big" id="d-volt">232.5</div>
+      <div class="metric-unit">V (Volts)</div>
+    </div>
+    <div class="metric-box curr">
+      <div class="metric-status"></div>
+      <div class="metric-icon">CURRENT</div>
+      <div class="metric-big" id="d-curr">0.22</div>
+      <div class="metric-unit">A (Amperes)</div>
+    </div>
+    <div class="metric-box pwr">
+      <div class="metric-status"></div>
+      <div class="metric-icon">POWER</div>
+      <div class="metric-big" id="d-pwr">45.8</div>
+      <div class="metric-unit">W (Watts)</div>
+    </div>
+    <div class="metric-box enrg">
+      <div class="metric-status"></div>
+      <div class="metric-icon">ENERGY</div>
+      <div class="metric-big" id="d-enrg">0.13</div>
+      <div class="metric-unit">kWh (Today)</div>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-header">
+      <div class="chart-title">Power Consumption — Live (W)</div>
+      <div class="chart-live">STREAMING</div>
+    </div>
+    <div class="chart-body" id="chart"></div>
+  </div>
+
+  <div class="threshold-panel">
+    <div class="threshold-header">
+      <div class="threshold-title">Alert Threshold</div>
+      <div class="threshold-val"><span id="thresh-val">100</span> W</div>
+    </div>
+    <input type="range" min="10" max="500" value="100" step="5" id="thresh-slider">
+    <div style="display:flex;justify-content:space-between;margin-top:6px;">
+      <span style="font-family:var(--mono);font-size:10px;color:var(--text3);">10 W</span>
+      <span style="font-family:var(--mono);font-size:10px;color:var(--text3);">500 W</span>
+    </div>
+  </div>
+
+  <div class="alert-panel" style="margin-top:2rem;">
+    <div class="alert-header">
+      <div class="alert-header-title">System Alerts</div>
+      <div class="alert-count" id="alert-count">1 ACTIVE</div>
+    </div>
+    <div id="alerts-list">
+      <div class="alert-item">
+        <div class="alert-dot ok"></div>
+        <div class="alert-msg">System online — NodeMCU connected to Blynk IoT cloud</div>
+        <div class="alert-time">just now</div>
+      </div>
+      <div class="alert-item">
+        <div class="alert-dot warn"></div>
+        <div class="alert-msg">Bulb power: 45.8 W — within normal range</div>
+        <div class="alert-time">00:12</div>
+      </div>
+      <div class="alert-item">
+        <div class="alert-dot err"></div>
+        <div class="alert-msg" id="thresh-alert">Power approaching threshold (100 W)</div>
+        <div class="alert-time">live</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- History Table -->
+  <div style="margin-top:2rem;">
+    <div style="font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--text2);text-transform:uppercase;margin-bottom:1rem;">Reading History</div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:4px;overflow:hidden;overflow-x:auto;">
+      <table class="data-table" id="history-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Time</th>
+            <th>Voltage (V)</th>
+            <th>Current (A)</th>
+            <th>Power (W)</th>
+            <th>Energy (kWh)</th>
+          </tr>
+        </thead>
+        <tbody id="history-body"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- APPLIANCES -->
+<section id="appliances">
+  <div class="section-label">// Device Control</div>
+  <h2 class="section-title">Appliance Monitor</h2>
+  <div class="appliances-grid">
+
+    <div class="appliance-card" id="app-bulb">
+      <div class="appliance-top">
+        <div>
+          <div class="appliance-icon">💡</div>
+          <div style="margin-top:0.75rem;">
+            <div class="appliance-name">Bulb</div>
+            <div class="appliance-sub">AC LOAD · 220V</div>
+          </div>
+        </div>
+        <div class="toggle-wrap">
+          <div class="toggle-switch on" id="tog-bulb" onclick="toggleApp('bulb')">
+            <div class="toggle-knob"></div>
+          </div>
+          <div class="toggle-label" id="tog-bulb-lbl">ON</div>
+        </div>
+      </div>
+      <div class="appliance-stats">
+        <div class="app-stat">
+          <span class="app-stat-val" id="bulb-v">232.5</span>
+          <span class="app-stat-label">Voltage V</span>
+        </div>
+        <div class="app-stat">
+          <span class="app-stat-val" id="bulb-c">0.22</span>
+          <span class="app-stat-label">Current A</span>
+        </div>
+        <div class="app-stat">
+          <span class="app-stat-val" id="bulb-p">45.8</span>
+          <span class="app-stat-label">Power W</span>
+        </div>
+        <div class="app-stat">
+          <span class="app-stat-val" id="bulb-e">0.04</span>
+          <span class="app-stat-label">Energy kWh</span>
+        </div>
+      </div>
+      <div class="app-progress">
+        <div class="app-progress-fill" id="bulb-bar" style="width:45%;background:var(--accent3);"></div>
+      </div>
+    </div>
+
+    <div class="appliance-card" id="app-fan">
+      <div class="appliance-top">
+        <div>
+          <div class="appliance-icon">🌀</div>
+          <div style="margin-top:0.75rem;">
+            <div class="appliance-name">Fan</div>
+            <div class="appliance-sub">AC LOAD · 220V</div>
+          </div>
+        </div>
+        <div class="toggle-wrap">
+          <div class="toggle-switch off" id="tog-fan" onclick="toggleApp('fan')">
+            <div class="toggle-knob"></div>
+          </div>
+          <div class="toggle-label" id="tog-fan-lbl">OFF</div>
+        </div>
+      </div>
+      <div class="appliance-stats">
+        <div class="app-stat">
+          <span class="app-stat-val" id="fan-v">0</span>
+          <span class="app-stat-label">Voltage V</span>
+        </div>
+        <div class="app-stat">
+          <span class="app-stat-val" id="fan-c">0</span>
+          <span class="app-stat-label">Current A</span>
+        </div>
+        <div class="app-stat">
+          <span class="app-stat-val" id="fan-p">0</span>
+          <span class="app-stat-label">Power W</span>
+        </div>
+        <div class="app-stat">
+          <span class="app-stat-val" id="fan-e">0</span>
+          <span class="app-stat-label">Energy kWh</span>
+        </div>
+      </div>
+      <div class="app-progress">
+        <div class="app-progress-fill" id="fan-bar" style="width:0%;background:var(--accent2);"></div>
+      </div>
+    </div>
+
+    <div class="appliance-card" id="app-socket">
+      <div class="appliance-top">
+        <div>
+          <div class="appliance-icon">🔌</div>
+          <div style="margin-top:0.75rem;">
+            <div class="appliance-name">Socket 3</div>
+            <div class="appliance-sub">AC LOAD · 220V</div>
+          </div>
+        </div>
+        <div class="toggle-wrap">
+          <div class="toggle-switch off" id="tog-socket" onclick="toggleApp('socket')">
+            <div class="toggle-knob"></div>
+          </div>
+          <div class="toggle-label" id="tog-socket-lbl">OFF</div>
+        </div>
+      </div>
+      <div class="appliance-stats">
+        <div class="app-stat">
+          <span class="app-stat-val" id="socket-v">0</span>
+          <span class="app-stat-label">Voltage V</span>
+        </div>
+        <div class="app-stat">
+          <span class="app-stat-val" id="socket-c">0</span>
+          <span class="app-stat-label">Current A</span>
+        </div>
+        <div class="app-stat">
+          <span class="app-stat-val" id="socket-p">0</span>
+          <span class="app-stat-label">Power W</span>
+        </div>
+        <div class="app-stat">
+          <span class="app-stat-val" id="socket-e">0</span>
+          <span class="app-stat-label">Energy kWh</span>
+        </div>
+      </div>
+      <div class="app-progress">
+        <div class="app-progress-fill" id="socket-bar" style="width:0%;background:var(--accent5);"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section id="architecture">
+  <div class="section-label">// System Design</div>
+  <h2 class="section-title">Architecture</h2>
+  <div class="arch-flow">
+    <div class="arch-node">
+      <span class="arch-node-icon">⚡</span>
+      <div class="arch-node-name">AC Load</div>
+      <div class="arch-node-sub">Bulb / Fan<br>220V Supply</div>
+    </div>
+    <div class="arch-arrow"><span class="arch-arrow-icon">CT</span></div>
+    <div class="arch-node">
+      <span class="arch-node-icon">🔍</span>
+      <div class="arch-node-name">PZEM-004T</div>
+      <div class="arch-node-sub">V, I, P, E<br>Sensor Module</div>
+    </div>
+    <div class="arch-arrow"><span class="arch-arrow-icon">UART</span></div>
+    <div class="arch-node">
+      <span class="arch-node-icon">🔧</span>
+      <div class="arch-node-name">ESP8266</div>
+      <div class="arch-node-sub">NodeMCU<br>Microcontroller</div>
+    </div>
+    <div class="arch-arrow"><span class="arch-arrow-icon">relay</span></div>
+    <div class="arch-node">
+      <span class="arch-node-icon">🔀</span>
+      <div class="arch-node-name">Relay</div>
+      <div class="arch-node-sub">Module<br>Switching</div>
+    </div>
+    <div class="arch-arrow"><span class="arch-arrow-icon">WiFi</span></div>
+    <div class="arch-node">
+      <span class="arch-node-icon">☁️</span>
+      <div class="arch-node-name">Blynk IoT</div>
+      <div class="arch-node-sub">Cloud<br>Platform</div>
+    </div>
+    <div class="arch-arrow"><span class="arch-arrow-icon">API</span></div>
+    <div class="arch-node">
+      <span class="arch-node-icon">📱</span>
+      <div class="arch-node-name">Dashboard</div>
+      <div class="arch-node-sub">Mobile + Web<br>Monitoring</div>
+    </div>
+  </div>
+
+  <div style="margin-top:3rem;">
+    <div style="font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--text2);text-transform:uppercase;margin-bottom:1rem;">Development Progress</div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:4px;overflow:hidden;overflow-x:auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Phase</th>
+            <th>Task</th>
+            <th>Status</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>01</td>
+            <td>Microcontroller code development</td>
+            <td><span class="status-badge done">✓ Done</span></td>
+            <td>C++ via Arduino IDE</td>
+          </tr>
+          <tr>
+            <td>02</td>
+            <td>Blynk IoT dashboard integration</td>
+            <td><span class="status-badge done">✓ Done</span></td>
+            <td>Virtual pins configured</td>
+          </tr>
+          <tr>
+            <td>03</td>
+            <td>Hardware setup — PZEM-004T</td>
+            <td><span class="status-badge done">✓ Done</span></td>
+            <td>CT clamp + 220V AC</td>
+          </tr>
+          <tr>
+            <td>04</td>
+            <td>Load testing — bulb and fan</td>
+            <td><span class="status-badge done">✓ Done</span></td>
+            <td>Real readings verified</td>
+          </tr>
+          <tr>
+            <td>05</td>
+            <td>Automation logic — threshold alerts</td>
+            <td><span class="status-badge pending">⏳ Planned</span></td>
+            <td>Future scope</td>
+          </tr>
+          <tr>
+            <td>06</td>
+            <td>Multi-room expansion</td>
+            <td><span class="status-badge pending">⏳ Planned</span></td>
+            <td>Scalability phase</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- HARDWARE -->
+<section id="hardware">
+  <div class="section-label">// Components</div>
+  <h2 class="section-title">Hardware Specs</h2>
+  <div class="specs-grid">
+    <div class="spec-card">
+      <div class="spec-num">01 — MICROCONTROLLER</div>
+      <div class="spec-name">NodeMCU ESP8266</div>
+      <div class="spec-role">Main Processing Unit</div>
+      <ul class="spec-params">
+        <li>CPU <span>Tensilica L106 80/160 MHz</span></li>
+        <li>Flash <span>4 MB</span></li>
+        <li>Wi-Fi <span>802.11 b/g/n</span></li>
+        <li>GPIO Pins <span>11 digital</span></li>
+        <li>UART <span>Rx D5 / Tx D6</span></li>
+        <li>Power <span>5V via USB / VCC</span></li>
+      </ul>
+    </div>
+    <div class="spec-card">
+      <div class="spec-num">02 — ENERGY SENSOR</div>
+      <div class="spec-name">PZEM-004T</div>
+      <div class="spec-role">AC Measurement Module</div>
+      <ul class="spec-params">
+        <li>Voltage <span>80–260 V AC</span></li>
+        <li>Current <span>0–100 A</span></li>
+        <li>Power <span>0–23 kW</span></li>
+        <li>Frequency <span>45–65 Hz</span></li>
+        <li>Interface <span>UART (TTL 5V)</span></li>
+        <li>CT Clamp <span>Non-invasive</span></li>
+      </ul>
+    </div>
+    <div class="spec-card">
+      <div class="spec-num">03 — SWITCHING</div>
+      <div class="spec-name">Relay Module</div>
+      <div class="spec-role">Appliance Control</div>
+      <ul class="spec-params">
+        <li>Type <span>5V Single Channel</span></li>
+        <li>Load Voltage <span>AC 250V / DC 30V</span></li>
+        <li>Load Current <span>10 A max</span></li>
+        <li>Trigger <span>GPIO from ESP8266</span></li>
+        <li>Isolation <span>Optocoupler</span></li>
+        <li>Indicators <span>LED status</span></li>
+      </ul>
+    </div>
+    <div class="spec-card">
+      <div class="spec-num">04 — POWER SUPPLY</div>
+      <div class="spec-name">Transformer / PSU</div>
+      <div class="spec-role">System Power</div>
+      <ul class="spec-params">
+        <li>Input <span>220V AC mains</span></li>
+        <li>Output <span>5V DC regulated</span></li>
+        <li>Capacity <span>2A min</span></li>
+        <li>Regulation <span>±5%</span></li>
+        <li>Ripple <span>&lt; 50 mV</span></li>
+        <li>Protection <span>Short circuit</span></li>
+      </ul>
+    </div>
+    <div class="spec-card">
+      <div class="spec-num">05 — PLATFORM</div>
+      <div class="spec-name">Blynk IoT</div>
+      <div class="spec-role">Cloud + Dashboard</div>
+      <ul class="spec-params">
+        <li>Protocol <span>HTTPS / WebSocket</span></li>
+        <li>Virtual Pins <span>V0–V3 (V,I,P,E)</span></li>
+        <li>Dashboard <span>Mobile + Web</span></li>
+        <li>History <span>DataStream storage</span></li>
+        <li>Automation <span>Event triggers</span></li>
+        <li>Alerts <span>Push notifications</span></li>
+      </ul>
+    </div>
+    <div class="spec-card">
+      <div class="spec-num">06 — SOFTWARE</div>
+      <div class="spec-name">Firmware Stack</div>
+      <div class="spec-role">Code & Tools</div>
+      <ul class="spec-params">
+        <li>Language <span>C++ (Arduino)</span></li>
+        <li>IDE <span>Arduino IDE, VS Code</span></li>
+        <li>Libraries <span>PZEM004Tv30, Blynk</span></li>
+        <li>Protocol <span>UART Modbus-like</span></li>
+        <li>OTA <span>Wi-Fi firmware update</span></li>
+        <li>Baud Rate <span>9600</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">// Project</div>
+  <h2 class="section-title">About the Project</h2>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>Most households lack real-time visibility into energy consumption at the appliance level. Traditional electricity meters only provide total monthly usage, making it nearly impossible to identify energy wastage or inefficient devices.</p>
+      <p>This project develops a low-cost IoT-based energy monitoring system using the NodeMCU ESP8266 microcontroller paired with a PZEM-004T sensor module. The system measures voltage, current, active power, and cumulative energy consumption in real-time.</p>
+      <p>Data is transmitted wirelessly to the Blynk IoT cloud platform and visualized on a live mobile and web dashboard. A relay module enables remote switching of appliances. Future scope includes threshold-based automated alerts and multi-room expansion.</p>
+      <p style="color:var(--accent);font-family:var(--mono);font-size:12px;margin-top:1.5rem;">Faculty Mentor: Dr. Swati · KR Mangalam University</p>
+    </div>
+    <div class="about-features">
+      <div class="feature-row">
+        <div class="feature-icon">📡</div>
+        <div>
+          <div class="feature-label">Real-time monitoring</div>
+          <div class="feature-sub">Live V, I, P, E readings via PZEM-004T</div>
+        </div>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">📊</div>
+        <div>
+          <div class="feature-label">Appliance-level tracking</div>
+          <div class="feature-sub">Per-device energy breakdown</div>
+        </div>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">🔔</div>
+        <div>
+          <div class="feature-label">Threshold alerts</div>
+          <div class="feature-sub">Push notification when usage exceeds limit</div>
+        </div>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">🔀</div>
+        <div>
+          <div class="feature-label">Remote relay control</div>
+          <div class="feature-sub">Switch appliances from dashboard</div>
+        </div>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">💾</div>
+        <div>
+          <div class="feature-label">Historical data storage</div>
+          <div class="feature-sub">DataStream logs for analysis</div>
+        </div>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">📱</div>
+        <div>
+          <div class="feature-label">Mobile dashboard</div>
+          <div class="feature-sub">Blynk app for on-the-go monitoring</div>
+        </div>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">⚡</div>
+        <div>
+          <div class="feature-label">Low-cost & scalable</div>
+          <div class="feature-sub">Expandable to multiple rooms</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section id="team">
+  <div class="section-label">// People</div>
+  <h2 class="section-title">Team</h2>
+  <div class="team-grid">
+    <div class="team-card">
+      <div class="team-avatar" style="background:rgba(0,112,243,0.1);border-color:rgba(0,112,243,0.25);color:#378ADD;">AG</div>
+      <div class="team-name">Arshia Goswami</div>
+      <div class="team-roll">2301730051</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:rgba(0,229,160,0.1);border-color:rgba(0,229,160,0.25);color:var(--accent);">VY</div>
+      <div class="team-name">Vineet Yadav</div>
+      <div class="team-roll">2301730053</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:rgba(139,92,246,0.1);border-color:rgba(139,92,246,0.25);color:var(--accent5);">AS</div>
+      <div class="team-name">Aadya Saxena</div>
+      <div class="team-roll">2301730037</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.25);color:var(--accent3);">HM</div>
+      <div class="team-name">Harsh Mehto</div>
+      <div class="team-roll">2301730054</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.25);color:var(--accent4);">HC</div>
+      <div class="team-name">Harsh Chaudhary</div>
+      <div class="team-roll">2301730034</div>
+    </div>
+  </div>
+  <div class="mentor-box">
+    <div class="mentor-avatar">DS</div>
+    <div class="mentor-info">
+      <label>Faculty Mentor</label>
+      <h3>Dr. Swati</h3>
+      <p>KR Mangalam University · Department of Computer Science &amp; Engineering</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-brand">⚡ Smart Energy Monitor</div>
+    <div class="footer-uni">K.R. Mangalam University — The Complete World of Education<br>Recognised under Section 2(f) of the UGC Act 1956</div>
+  </div>
+  <div class="footer-right">
+    Pre-Final Year Project · 2024–25<br>
+    B.Tech CSE · Batch 2023<br>
+    Faculty Mentor: Dr. Swati<br>
+    <span style="color:var(--accent);">Empowering the Youth; Empowering the Nation</span>
+  </div>
+</footer>
+
+<script>
+// ─── DATA SIMULATION ───────────────────────────────
+let tick = 0;
+let powerHistory = [];
+const maxHistory = 20;
+let energyTotal = 0.13;
+let appState = { bulb: true, fan: false, socket: false };
+const appWatts = { bulb: 45, fan: 58, socket: 30 };
+let threshold = 100;
+
+function randNoise(base, range) {
+  return +(base + (Math.random() - 0.5) * range).toFixed(2);
+}
+
+function getTotalPower() {
+  let p = 0;
+  if (appState.bulb) p += appWatts.bulb;
+  if (appState.fan) p += appWatts.fan;
+  if (appState.socket) p += appWatts.socket;
+  return p;
+}
+
+function update() {
+  tick++;
+  const totalP = getTotalPower();
+  const voltage = randNoise(231.5, 3);
+  const power = totalP > 0 ? randNoise(totalP, totalP * 0.05) : 0;
+  const current = totalP > 0 ? +(power / voltage).toFixed(3) : 0;
+  energyTotal += power / (3600 * 1000);
+  const energy = +energyTotal.toFixed(4);
+
+  // Update hero metrics
+  document.getElementById('h-volt').textContent = voltage.toFixed(1);
+  document.getElementById('h-curr').textContent = current.toFixed(2);
+  document.getElementById('h-pwr').textContent = power.toFixed(1);
+  document.getElementById('h-enrg').textContent = energy.toFixed(3);
+
+  // Update dashboard metrics
+  document.getElementById('d-volt').textContent = voltage.toFixed(1);
+  document.getElementById('d-curr').textContent = current.toFixed(2);
+  document.getElementById('d-pwr').textContent = power.toFixed(1);
+  document.getElementById('d-enrg').textContent = energy.toFixed(3);
+
+  // Update appliance cards
+  if (appState.bulb) {
+    const bv = randNoise(voltage, 1), bp = randNoise(appWatts.bulb, 2);
+    document.getElementById('bulb-v').textContent = bv.toFixed(1);
+    document.getElementById('bulb-c').textContent = (bp/bv).toFixed(3);
+    document.getElementById('bulb-p').textContent = bp.toFixed(1);
+    document.getElementById('bulb-e').textContent = +(bp / 1000 * (tick/3600)).toFixed(4);
+    document.getElementById('bulb-bar').style.width = Math.min(100, bp / 200 * 100) + '%';
+  }
+  if (appState.fan) {
+    const fv = randNoise(voltage, 1), fp = randNoise(appWatts.fan, 3);
+    document.getElementById('fan-v').textContent = fv.toFixed(1);
+    document.getElementById('fan-c').textContent = (fp/fv).toFixed(3);
+    document.getElementById('fan-p').textContent = fp.toFixed(1);
+    document.getElementById('fan-e').textContent = +(fp / 1000 * (tick/3600)).toFixed(4);
+    document.getElementById('fan-bar').style.width = Math.min(100, fp / 200 * 100) + '%';
+  }
+  if (appState.socket) {
+    const sv = randNoise(voltage, 1), sp = randNoise(appWatts.socket, 2);
+    document.getElementById('socket-v').textContent = sv.toFixed(1);
+    document.getElementById('socket-c').textContent = (sp/sv).toFixed(3);
+    document.getElementById('socket-p').textContent = sp.toFixed(1);
+    document.getElementById('socket-e').textContent = +(sp / 1000 * (tick/3600)).toFixed(4);
+    document.getElementById('socket-bar').style.width = Math.min(100, sp / 200 * 100) + '%';
+  }
+
+  // Power history chart
+  powerHistory.push({ val: power, t: new Date().toLocaleTimeString('en', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }) });
+  if (powerHistory.length > maxHistory) powerHistory.shift();
+  renderChart();
+
+  // History table
+  addHistoryRow(voltage, current, power, energy);
+
+  // Alert threshold check
+  const alertMsg = document.getElementById('thresh-alert');
+  if (power > threshold) {
+    alertMsg.textContent = `⚠ Power ${power.toFixed(1)} W exceeds threshold (${threshold} W) — check appliances`;
+    alertMsg.style.color = 'var(--accent4)';
+    document.querySelector('.alert-dot.err').style.background = 'var(--accent4)';
+  } else {
+    alertMsg.textContent = `Power ${power.toFixed(1)} W — within threshold (${threshold} W)`;
+    alertMsg.style.color = 'var(--accent)';
+    document.querySelector('.alert-dot.err').style.background = 'var(--accent)';
+  }
+}
+
+// ─── CHART ─────────────────────────────────────────
+function renderChart() {
+  const container = document.getElementById('chart');
+  container.innerHTML = '';
+  if (powerHistory.length === 0) return;
+  const maxVal = Math.max(...powerHistory.map(r => r.val), 10);
+
+  powerHistory.forEach((r, i) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'chart-bar-wrap';
+    const h = Math.max(4, (r.val / maxVal) * 140);
+    const isLatest = i === powerHistory.length - 1;
+
+    const bar = document.createElement('div');
+    bar.className = 'chart-bar';
+    bar.style.height = h + 'px';
+    bar.style.background = r.val > threshold
+      ? 'var(--accent4)'
+      : isLatest ? 'var(--accent)' : 'rgba(0,229,160,0.25)';
+    bar.title = `${r.t}: ${r.val.toFixed(1)} W`;
+
+    const val = document.createElement('div');
+    val.className = 'chart-bar-val';
+    val.textContent = r.val > 0 ? r.val.toFixed(0) : '';
+
+    wrap.appendChild(bar);
+    wrap.appendChild(val);
+    container.appendChild(wrap);
+  });
+}
+
+// ─── HISTORY TABLE ──────────────────────────────────
+let historyRows = [];
+let rowCount = 0;
+function addHistoryRow(v, c, p, e) {
+  rowCount++;
+  const now = new Date().toLocaleTimeString('en', { hour12: false });
+  historyRows.unshift({ n: rowCount, t: now, v: v.toFixed(1), c: c.toFixed(3), p: p.toFixed(1), e: e.toFixed(4) });
+  if (historyRows.length > 10) historyRows.pop();
+  const tbody = document.getElementById('history-body');
+  tbody.innerHTML = historyRows.map(r =>
+    `<tr><td>${r.n}</td><td>${r.t}</td><td>${r.v}</td><td>${r.c}</td><td>${r.p}</td><td>${r.e}</td></tr>`
+  ).join('');
+}
+
+// ─── TOGGLE APPLIANCES ─────────────────────────────
+function toggleApp(name) {
+  appState[name] = !appState[name];
+  const tog = document.getElementById('tog-' + name);
+  const lbl = document.getElementById('tog-' + name + '-lbl');
+  tog.classList.toggle('on', appState[name]);
+  tog.classList.toggle('off', !appState[name]);
+  lbl.textContent = appState[name] ? 'ON' : 'OFF';
+  if (!appState[name]) {
+    document.getElementById(name + '-v').textContent = '0';
+    document.getElementById(name + '-c').textContent = '0';
+    document.getElementById(name + '-p').textContent = '0';
+    document.getElementById(name + '-e').textContent = '0';
+    document.getElementById(name + '-bar').style.width = '0%';
+  }
+}
+
+// ─── THRESHOLD SLIDER ──────────────────────────────
+document.getElementById('thresh-slider').addEventListener('input', function() {
+  threshold = +this.value;
+  document.getElementById('thresh-val').textContent = threshold;
+});
+
+// ─── INIT ───────────────────────────────────────────
+update();
+setInterval(update, 1500);
+</script>
+</body>
+</html>
